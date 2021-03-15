@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.applejuicenet.client</groupId>
+    <artifactId>AJClientGUI</artifactId>
+    <version>1</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>modules/AJCoreGUI</module>
+        <module>modules/logviewer</module>
+        <module>modules/versionchecker</module>
+        <module>modules/standardpwdlpolicy</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <inherited>false</inherited>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>antrun.package.archive</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <zip destfile="${basedir}/target/AJCoreGUI.zip">
+                                    <zipfileset dir="${basedir}/resources/" includes="*/*"/>
+                                    <zipfileset dir="${basedir}/resources/" includes="AJCoreGUI.exe"/>
+                                    <zipfileset dir="${basedir}/modules/AJCoreGUI/target/" includes="AJCoreGUI-*.jar" fullpath="AJCoreGUI.jar"/>
+                                    <zipfileset dir="${basedir}/modules/logviewer/target/" includes="logviewer-*.jar" fullpath="plugins/logviewer.jar"/>
+                                    <zipfileset dir="${basedir}/modules/versionchecker/target/" includes="versionchecker-*.jar" fullpath="plugins/versionchecker.jar"/>
+                                    <zipfileset dir="${basedir}/modules/standardpwdlpolicy/target/" includes="StandardPwdlPolicy-*.jar" fullpath="pwdlpolicies/StandardPwdlPolicy.jar"/>
+                                </zip>
+                                <exec executable="shasum" dir="${basedir}/target/" output="${basedir}/target/AJCoreGUI.zip.sha256.txt">
+                                    <arg line="-a 256"/>
+                                    <arg line="AJCoreGUI.zip"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>antrun.package.osx</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <zip destfile="${basedir}/target/AJCoreGUI.macOS.zip">
+                                    <zipfileset dir="${basedir}/resources/" prefix="AJCoreGUI.app/Contents/Java/" includes="*/*"/>
+                                    <zipfileset dir="${basedir}/modules/AJCoreGUI/target/" includes="AJCoreGUI-*.jar" fullpath="AJCoreGUI.app/Contents/Java/AJCoreGUI.jar"/>
+                                    <zipfileset dir="${basedir}/modules/logviewer/target/" includes="logviewer-*.jar" fullpath="AJCoreGUI.app/Contents/Java/plugins/logviewer.jar"/>
+                                    <zipfileset dir="${basedir}/modules/versionchecker/target/" includes="versionchecker-*.jar" fullpath="AJCoreGUI.app/Contents/Java/plugins/versionchecker.jar"/>
+                                    <zipfileset dir="${basedir}/modules/standardpwdlpolicy/target/" includes="StandardPwdlPolicy-*.jar" fullpath="AJCoreGUI.app/Contents/Java/pwdlpolicies/StandardPwdlPolicy.jar"/>
+                                    <zipfileset dir="${basedir}/osx/" includes="Info.plist" prefix="AJCoreGUI.app/Contents/"/>
+                                    <zipfileset dir="${basedir}/osx/" includes="AJCoreGUI.icns" prefix="AJCoreGUI.app/Contents/Resources"/>
+                                    <zipfileset dir="${basedir}/osx/" includes="universalJavaApplicationStub" prefix="AJCoreGUI.app/Contents/MacOS" filemode="777"/>
+                                </zip>
+                                <exec executable="shasum" dir="${basedir}/target/" output="${basedir}/target/AJCoreGUI.macOS.zip.sha256.txt">
+                                    <arg line="-a 256"/>
+                                    <arg line="AJCoreGUI.macOS.zip"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

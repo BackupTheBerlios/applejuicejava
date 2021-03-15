@@ -1,0 +1,9 @@
+.idea
+target/
+dependency-reduced-pom.xml
+*.iml
+*.jar
+*.zip
+*.exc
+
+pom.xml.versionsBackup
